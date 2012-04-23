@@ -2,7 +2,7 @@ language: php
 
 before_script:
   - sudo apt-get update
-  - sudo apt-get install -y libgpac
+  - sudo apt-get install -y gpac
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar install
 
