@@ -2,7 +2,7 @@
 
 namespace MP4Box\Exception;
 
-class RuntimeException extends \RuntimeException
+class RuntimeException extends \RuntimeException implements Exception
 {
 
 }
