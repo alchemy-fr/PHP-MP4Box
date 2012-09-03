@@ -11,7 +11,7 @@
 
 namespace MP4Box\Exception;
 
-class RuntimeException extends \RuntimeException implements ExceptionInterface
+interface ExceptionInterface
 {
 
 }
