@@ -32,7 +32,7 @@ class MP4BoxServiceProvider implements ServiceProviderInterface
                 $logger->pushHandler(new NullHandler());
             }
 
-            if ( ! $app['mp4box.binary']) {
+            if (! $app['mp4box.binary']) {
                 return MP4Box::load($logger);
             } else {
                 return new MP4Box($app['mp4box.binary'], $logger);

@@ -36,8 +36,7 @@ class MP4Box
     {
         $this->binary = $binary;
 
-        if ( ! $logger)
-        {
+        if (! $logger) {
             $logger = new Logger('default');
             $logger->pushHandler(new NullHandler());
         }
@@ -47,8 +46,7 @@ class MP4Box
 
     public function open($pathfile)
     {
-        if ( ! file_exists($pathfile))
-        {
+        if ( ! file_exists($pathfile)) {
             $this->logger->addError(sprintf('Request to open %s failed', $pathfile));
 
             throw new InvalidFileArgumentException(sprintf('File %s does not exists', $pathfile));
@@ -63,8 +61,7 @@ class MP4Box
 
     public function process($outPathfile = null, Array $options = null)
     {
-        if ( ! $this->pathfile)
-        {
+        if (! $this->pathfile) {
             throw new LogicException('No file open');
         }
 
@@ -73,23 +70,18 @@ class MP4Box
           , escapeshellarg($this->pathfile)
         );
 
-        if ($outPathfile)
-        {
+        if ($outPathfile) {
             $cmd .= sprintf(' -out %s', escapeshellarg($outPathfile));
         }
 
-        try
-        {
+        try {
             $process = new Process($cmd);
             $process->run();
-        }
-        catch (\RuntimeException $e)
-        {
+        } catch (\RuntimeException $e) {
             throw new RuntimeException(sprintf('Command %s failed', $cmd));
         }
 
-        if ( ! $process->isSuccessful())
-        {
+        if ( ! $process->isSuccessful()) {
             throw new RuntimeException(sprintf('Command %s failed', $cmd));
         }
 
@@ -107,8 +99,7 @@ class MP4Box
     {
         $finder = new ExecutableFinder();
 
-        if (null === $binary = $finder->find('MP4Box'))
-        {
+        if (null === $binary = $finder->find('MP4Box')) {
             throw new BinaryNotFoundException('Binary not found');
         }
 
