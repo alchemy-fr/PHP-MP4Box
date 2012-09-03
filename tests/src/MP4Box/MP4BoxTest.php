@@ -2,6 +2,9 @@
 
 namespace MP4Box;
 
+use Monolog\Logger;
+use Monolog\Handler\NullHandler;
+
 require_once dirname(__FILE__) . '/../../../src/MP4Box/MP4Box.php';
 
 class MP4BoxTest extends \PHPUnit_Framework_TestCase
@@ -18,8 +21,8 @@ class MP4BoxTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $logger = new \Monolog\Logger('tests');
-        $logger->pushHandler(new \Monolog\Handler\NullHandler());
+        $logger = new Logger('tests');
+        $logger->pushHandler(new NullHandler());
 
         $this->object = MP4Box::load($logger);
     }
@@ -61,7 +64,7 @@ class MP4BoxTest extends \PHPUnit_Framework_TestCase
             unlink($out);
         }
 
-        $this->object->open(__DIR__ . '/../../files/Video.mp4')->process(array(), $out)->close();
+        $this->object->open(__DIR__ . '/../../files/Video.mp4')->process($out)->close();
 
         $this->assertTrue(file_exists($out));
         unlink($out);

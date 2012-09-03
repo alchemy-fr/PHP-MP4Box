@@ -61,7 +61,7 @@ class MP4Box
         return $this;
     }
 
-    public function process(Array $options = null, $outPathfile = null)
+    public function process($outPathfile = null, Array $options = null)
     {
         if ( ! $this->pathfile)
         {
