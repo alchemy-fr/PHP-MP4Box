@@ -8,12 +8,6 @@
         {
             "package": "symfony/process",
             "version": "dev-master",
-            "alias-pretty-version": "2.1.x-dev",
-            "alias-version": "2.1.9999999.9999999-dev"
-        },
-        {
-            "package": "symfony/process",
-            "version": "dev-master",
             "source-reference": "9d4ac6860929f84e68732d1793cd2edb0881d955",
             "commit-date": "1346330945"
         }
@@ -36,12 +30,6 @@
             "version": "dev-master",
             "source-reference": "db836b8cfadc0f39dacafa2bf311a1ab603600bb",
             "commit-date": "1343051648"
-        },
-        {
-            "package": "silex/silex",
-            "version": "dev-master",
-            "alias-pretty-version": "1.0.x-dev",
-            "alias-version": "1.0.9999999.9999999-dev"
         },
         {
             "package": "silex/silex",
