@@ -1,5 +1,4 @@
 /vendor
 /nbproject
-composer.lock
 composer.phar
 /tests/phpunit_report
