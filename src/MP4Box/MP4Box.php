@@ -22,7 +22,6 @@ use Symfony\Component\Process\ExecutableFinder;
 
 class MP4Box
 {
-
     protected $pathfile;
     protected $binary;
 
@@ -34,9 +33,13 @@ class MP4Box
 
     public function __construct($binary, Logger $logger = null)
     {
+        if ( ! is_executable($binary)) {
+            throw new BinaryNotFoundException(sprintf('`%s` does not seem to be executable', $binary));
+        }
+
         $this->binary = $binary;
 
-        if (! $logger) {
+        if ( ! $logger) {
             $logger = new Logger('default');
             $logger->pushHandler(new NullHandler());
         }
@@ -61,13 +64,13 @@ class MP4Box
 
     public function process($outPathfile = null, Array $options = null)
     {
-        if (! $this->pathfile) {
+        if ( ! $this->pathfile) {
             throw new LogicException('No file open');
         }
 
         $cmd = sprintf("%s -quiet -inter 0.5 %s"
-          , $this->binary
-          , escapeshellarg($this->pathfile)
+            , $this->binary
+            , escapeshellarg($this->pathfile)
         );
 
         if ($outPathfile) {
@@ -105,5 +108,4 @@ class MP4Box
 
         return new static($binary, $logger);
     }
-
 }

@@ -29,6 +29,7 @@ class MP4BoxTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers MP4Box\MP4Box::__construct
+     * @expectedException MP4Box\Exception\BinaryNotFoundException
      */
     public function testConstruct()
     {
