@@ -62,7 +62,7 @@ class MP4Box
         return $this;
     }
 
-    public function process($outPathfile = null, Array $options = null)
+    public function process($outPathfile = null)
     {
         if (!$this->pathfile) {
             throw new LogicException('No file open');
