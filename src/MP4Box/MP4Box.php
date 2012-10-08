@@ -17,7 +17,7 @@ use MP4Box\Exception\InvalidFileArgumentException;
 use MP4Box\Exception\LogicException;
 use MP4Box\Exception\RuntimeException;
 use MP4Box\Exception\BinaryNotFoundException;
-use Symfony\Component\Process\Process;
+use Symfony\Component\Process\ProcessBuilder;
 use Symfony\Component\Process\ExecutableFinder;
 
 class MP4Box
@@ -33,13 +33,13 @@ class MP4Box
 
     public function __construct($binary, Logger $logger = null)
     {
-        if ( ! is_executable($binary)) {
+        if (!is_executable($binary)) {
             throw new BinaryNotFoundException(sprintf('`%s` does not seem to be executable', $binary));
         }
 
         $this->binary = $binary;
 
-        if ( ! $logger) {
+        if (!$logger) {
             $logger = new Logger('default');
             $logger->pushHandler(new NullHandler());
         }
@@ -49,7 +49,7 @@ class MP4Box
 
     public function open($pathfile)
     {
-        if ( ! file_exists($pathfile)) {
+        if (!file_exists($pathfile)) {
             $this->logger->addError(sprintf('Request to open %s failed', $pathfile));
 
             throw new InvalidFileArgumentException(sprintf('File %s does not exists', $pathfile));
@@ -64,28 +64,28 @@ class MP4Box
 
     public function process($outPathfile = null, Array $options = null)
     {
-        if ( ! $this->pathfile) {
+        if (!$this->pathfile) {
             throw new LogicException('No file open');
         }
 
-        $cmd = sprintf("%s -quiet -inter 0.5 %s"
-            , $this->binary
-            , escapeshellarg($this->pathfile)
-        );
+        $builder = ProcessBuilder::create(array(
+            $this->binary, '-quiet', '-inter', '0.5', $this->pathfile
+        ));
 
         if ($outPathfile) {
-            $cmd .= sprintf(' -out %s', escapeshellarg($outPathfile));
+            $builder->add('-out')->add($outPathfile);
         }
+
+        $process = $builder->getProcess();
 
         try {
-            $process = new Process($cmd);
             $process->run();
         } catch (\RuntimeException $e) {
-            throw new RuntimeException(sprintf('Command %s failed', $cmd));
+            throw new RuntimeException(sprintf('Command %s failed', $process->getCommandline()));
         }
 
-        if ( ! $process->isSuccessful()) {
-            throw new RuntimeException(sprintf('Command %s failed', $cmd));
+        if (!$process->isSuccessful()) {
+            throw new RuntimeException(sprintf('Command %s failed', $process->getCommandline()));
         }
 
         return $this;
