@@ -69,7 +69,7 @@ class MP4Box
         }
 
         $builder = ProcessBuilder::create(array(
-            $this->binary, '-quiet', '-inter', '0.5', $this->pathfile
+            $this->binary, '-quiet', '-inter', '0.5', '-tmp', dirname($this->pathfile), $this->pathfile,
         ));
 
         if ($outPathfile) {
