@@ -1,6 +1,6 @@
 #PHP MP4Box
 
-[![Build Status](https://secure.travis-ci.org/alchemy-fr/PHP-MP4Box.png)](http://travis-ci.org/alchemy-fr/PHP-MP4Box)
+[![Build Status](https://secure.travis-ci.org/alchemy-fr/PHP-MP4Box.png?branch=master)](http://travis-ci.org/alchemy-fr/PHP-MP4Box)
 
 PHP driver for MP4Box
 
