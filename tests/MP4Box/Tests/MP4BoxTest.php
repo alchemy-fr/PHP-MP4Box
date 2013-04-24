@@ -1,11 +1,8 @@
 <?php
 
-namespace MP4Box;
+namespace MP4Box\Tests;
 
-use Monolog\Logger;
-use Monolog\Handler\NullHandler;
-
-require_once dirname(__FILE__) . '/../../../src/MP4Box/MP4Box.php';
+use MP4Box\MP4Box;
 
 class MP4BoxTest extends \PHPUnit_Framework_TestCase
 {

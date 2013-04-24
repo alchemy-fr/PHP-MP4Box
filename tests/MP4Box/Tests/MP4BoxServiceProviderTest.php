@@ -1,10 +1,9 @@
 <?php
 
-namespace MP4Box;
+namespace MP4Box\Tests;
 
 use Silex\Application;
-
-require_once dirname(__FILE__) . '/../../../src/MP4Box/MP4Box.php';
+use MP4Box\MP4BoxServiceProvider;
 
 class MP4BoxServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
