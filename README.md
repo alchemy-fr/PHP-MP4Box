@@ -38,7 +38,7 @@ $mp4box->process('video.mp4', 'output.mp4');
 
 ## Silex Service Provider :
 
-A [Silex]() Service Provider is available, all parameters are optionals :
+A [Silex](silex.sensiolabs.org) Service Provider is available, all parameters are optionals :
 
 ```php
 $app = new Silex\Application();
