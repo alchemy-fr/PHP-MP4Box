@@ -1,7 +1,11 @@
 CHANGELOG
 ---------
 
-* 0.2.0 (xx-xx-2013)
+* 0.2.1 (xx-xx-2013)
+
+  * Add support for timeout in ServiceProvider
+
+* 0.2.0 (04-24-2013)
 
   * Use alchemy/binary-driver as base driver
   * BC Break : `MP4Box::load()` is replaced by `MP4Box::create()`. `load` now
