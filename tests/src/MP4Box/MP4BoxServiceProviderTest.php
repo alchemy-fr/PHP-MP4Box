@@ -10,7 +10,6 @@ require_once dirname(__FILE__) . '/../../../src/MP4Box/MP4Box.php';
 
 class MP4BoxServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
-
     public function getApplication()
     {
         return new Application();
@@ -25,7 +24,7 @@ class MP4BoxServiceProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException MP4Box\Exception\BinaryNotFoundException
+     * @expectedException Alchemy\BinaryDriver\Exception\ExecutableNotFoundException
      */
     public function testInitFailOnBinary()
     {

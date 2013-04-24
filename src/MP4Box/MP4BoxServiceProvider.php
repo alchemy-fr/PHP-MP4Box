@@ -36,9 +36,9 @@ class MP4BoxServiceProvider implements ServiceProviderInterface
             }
 
             if ( ! $app['mp4box.binary']) {
-                return MP4Box::load($logger);
+                return MP4Box::create($logger);
             } else {
-                return new MP4Box($app['mp4box.binary'], $logger);
+                return MP4Box::load($app['mp4box.binary'], $logger);
             }
         });
     }

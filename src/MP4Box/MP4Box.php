@@ -11,101 +11,66 @@
 
 namespace MP4Box;
 
-use Monolog\Logger;
-use Monolog\Handler\NullHandler;
+use Alchemy\BinaryDriver\AbstractBinary;
+use Alchemy\BinaryDriver\ConfigurationInterface;
 use MP4Box\Exception\InvalidFileArgumentException;
-use MP4Box\Exception\LogicException;
 use MP4Box\Exception\RuntimeException;
-use MP4Box\Exception\BinaryNotFoundException;
-use Symfony\Component\Process\ProcessBuilder;
-use Symfony\Component\Process\ExecutableFinder;
+use Psr\Log\LoggerInterface;
 
-class MP4Box
+class MP4Box extends AbstractBinary
 {
-    protected $pathfile;
-    protected $binary;
-
-    /**
-     *
-     * @var Logger
-     */
-    protected $logger;
-
-    public function __construct($binary, Logger $logger = null)
+    public function process($inputFile = null, $outputFile = null)
     {
-        if (!is_executable($binary)) {
-            throw new BinaryNotFoundException(sprintf('`%s` does not seem to be executable', $binary));
+        if (!file_exists($inputFile) || !is_readable($inputFile)) {
+            $this->logger->addError(sprintf('Request to open %s failed', $inputFile));
+            throw new InvalidFileArgumentException(sprintf('File %s does not exist or is not readable', $inputFile));
         }
 
-        $this->binary = $binary;
+        $arguments = array(
+            '-quiet',
+            '-inter',
+            '0.5',
+            '-tmp',
+            dirname($inputFile),
+            $inputFile,
+        );
 
-        if (!$logger) {
-            $logger = new Logger('default');
-            $logger->pushHandler(new NullHandler());
+        if ($outputFile) {
+            $arguments[] = '-out';
+            $arguments[] = $outputFile;
         }
 
-        $this->logger = $logger;
-    }
-
-    public function open($pathfile)
-    {
-        if (!file_exists($pathfile)) {
-            $this->logger->addError(sprintf('Request to open %s failed', $pathfile));
-
-            throw new InvalidFileArgumentException(sprintf('File %s does not exists', $pathfile));
-        }
-
-        $this->logger->addInfo(sprintf('MP4Box opens %s', $pathfile));
-
-        $this->pathfile = $pathfile;
-
-        return $this;
-    }
-
-    public function process($outPathfile = null, Array $options = null)
-    {
-        if (!$this->pathfile) {
-            throw new LogicException('No file open');
-        }
-
-        $builder = ProcessBuilder::create(array(
-            $this->binary, '-quiet', '-inter', '0.5', '-tmp', dirname($this->pathfile), $this->pathfile,
-        ));
-
-        if ($outPathfile) {
-            $builder->add('-out')->add($outPathfile);
-        }
-
-        $process = $builder->getProcess();
+        $process = $this->factory->create($arguments);
 
         try {
             $process->run();
         } catch (\RuntimeException $e) {
-            throw new RuntimeException(sprintf('Command %s failed', $process->getCommandline()));
+            throw new RuntimeException(sprintf(
+                'MP4Box failed to process %s', $inputFile
+            ), $e->getCode(), $e);
         }
 
         if (!$process->isSuccessful()) {
-            throw new RuntimeException(sprintf('Command %s failed', $process->getCommandline()));
+            throw new RuntimeException(sprintf(
+                'MP4Box failed to process %s, command %s is not successful',
+                $inputFile,
+                $process->getCommandline()
+            ));
         }
 
         return $this;
     }
 
-    public function close()
+    /**
+     * Creates an MP4Box binary adapter
+     *
+     * @param null|LoggerInterface $logger
+     * @param array|ConfigurationInterface $conf
+     *
+     * @return MP4Box
+     */
+    public static function create(LoggerInterface $logger = null, $conf = array())
     {
-        $this->pathfile = null;
-
-        return $this;
-    }
-
-    public static function load(Logger $logger = null)
-    {
-        $finder = new ExecutableFinder();
-
-        if (null === $binary = $finder->find('MP4Box')) {
-            throw new BinaryNotFoundException('Binary not found');
-        }
-
-        return new static($binary, $logger);
+        return static::load('MP4Box', $logger, $conf);
     }
 }
