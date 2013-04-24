@@ -8,6 +8,8 @@ CHANGELOG
     allows a driver creation with a customized binary path.
   * BC Break : Invoking constructor is deprecated in favor of `load` and `create`
     methods.
+  * BC Break : There are no more `open` and `close` methods. The `process` method
+    now takes input and output files as argument.
 
 * 0.1.1 (01-11-2012)
 
