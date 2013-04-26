@@ -2,7 +2,7 @@
     "name": "php-mp4box/php-mp4box",
     "type": "library",
     "description": "PHP MP4Box, an Object Oriented library for easy file conversion with MP4 Box",
-    "keywords": [],
+    "keywords": ["mp4box", "gpac"],
     "license": "MIT",
     "authors": [
         {
