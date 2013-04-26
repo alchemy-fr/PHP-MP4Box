@@ -74,7 +74,7 @@ class MP4Box extends AbstractBinary
     /**
      * Creates an MP4Box binary adapter
      *
-     * @param null|LoggerInterface $logger
+     * @param null|LoggerInterface         $logger
      * @param array|ConfigurationInterface $conf
      *
      * @return MP4Box
