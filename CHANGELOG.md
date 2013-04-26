@@ -4,6 +4,7 @@ CHANGELOG
 * 0.2.2 (xx-xx-xxxx)
 
   * Split unit and functional tests
+  * Upgrade to alchemy/binary-driver 1.3.4
 
 * 0.2.1 (04-24-2013)
 

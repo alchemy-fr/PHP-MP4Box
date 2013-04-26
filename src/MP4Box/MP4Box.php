@@ -13,16 +13,36 @@ namespace MP4Box;
 
 use Alchemy\BinaryDriver\AbstractBinary;
 use Alchemy\BinaryDriver\ConfigurationInterface;
+use Alchemy\BinaryDriver\Exception\ExecutionFailureException;
 use MP4Box\Exception\InvalidFileArgumentException;
 use MP4Box\Exception\RuntimeException;
 use Psr\Log\LoggerInterface;
 
 class MP4Box extends AbstractBinary
 {
-    public function process($inputFile = null, $outputFile = null)
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'MP4Box';
+    }
+
+    /**
+     * Processes a file
+     *
+     * @param string      $inputFile  The file to process.
+     * @param null|string $outputFile The output file to write. If not provided, processes the file in place.
+     *
+     * @return MP4Box
+     *
+     * @throws InvalidFileArgumentException In case the input file is not readable
+     * @throws RuntimeException             In case the process failed
+     */
+    public function process($inputFile, $outputFile = null)
     {
         if (!file_exists($inputFile) || !is_readable($inputFile)) {
-            $this->logger->addError(sprintf('Request to open %s failed', $inputFile));
+            $this->logger->error(sprintf('Request to open %s failed', $inputFile));
             throw new InvalidFileArgumentException(sprintf('File %s does not exist or is not readable', $inputFile));
         }
 
@@ -40,22 +60,12 @@ class MP4Box extends AbstractBinary
             $arguments[] = $outputFile;
         }
 
-        $process = $this->factory->create($arguments);
-
         try {
-            $process->run();
-        } catch (\RuntimeException $e) {
+            $this->run($this->factory->create($arguments));
+        } catch (ExecutionFailureException $e) {
             throw new RuntimeException(sprintf(
                 'MP4Box failed to process %s', $inputFile
             ), $e->getCode(), $e);
-        }
-
-        if (!$process->isSuccessful()) {
-            throw new RuntimeException(sprintf(
-                'MP4Box failed to process %s, command %s is not successful',
-                $inputFile,
-                $process->getCommandline()
-            ));
         }
 
         return $this;
