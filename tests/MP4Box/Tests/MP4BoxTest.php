@@ -3,50 +3,46 @@
 namespace MP4Box\Tests;
 
 use MP4Box\MP4Box;
+use Alchemy\BinaryDriver\BinaryDriverTestCase;
 
-class MP4BoxTest extends \PHPUnit_Framework_TestCase
+class MP4BoxTest extends BinaryDriverTestCase
 {
-    /**
-     * @var MP4Box
-     */
-    protected $object;
-
-    protected function setUp()
+    public function testProcessOutputWithCustomOutput()
     {
-        $this->object = MP4Box::create();
-    }
+        $input = __DIR__ . '/../../files/Video.mp4';
+        $out = 'Output.mp4';
 
-    public function testProcess()
-    {
-        $this->object->process(__DIR__ . '/../../files/Video.mp4');
-    }
+        $mp4box = MP4Box::create();
 
-    public function testProcessOutput()
-    {
-        $out = __DIR__ . '/../../files/OutVideo.mp4';
+        $factory = $this->createProcessBuilderFactoryMock();
+        $process = $this->createProcessMock(1, true);
 
-        if (file_exists($out)) {
-            unlink($out);
-        }
+        $factory
+            ->expects($this->once())
+            ->method('create')
+            ->with(array(
+                '-quiet',
+                '-inter',
+                '0.5',
+                '-tmp',
+                dirname($input),
+                $input,
+                '-out',
+                $out,
+            ))
+            ->will($this->returnValue($process));
 
-        $this->object->process(__DIR__ . '/../../files/Video.mp4', $out);
-        $this->assertTrue(file_exists($out));
-        unlink($out);
+        $mp4box->setProcessBuilderFactory($factory);
+
+        $mp4box->process(__DIR__ . '/../../files/Video.mp4', $out);
     }
 
     /**
      * @expectedException MP4Box\Exception\InvalidFileArgumentException
      */
-    public function testOpenFail()
+    public function testProcessOnNonUnexistingFile()
     {
-        $this->object->process(__DIR__ . '/../../files/Unknown');
-    }
-
-    /**
-     * @expectedException MP4Box\Exception\RuntimeException
-     */
-    public function testProcessFail()
-    {
-        $this->object->process(__DIR__ . '/../../files/WrongFile.mp4');
+        $mp4box = MP4Box::create();
+        $mp4box->process(__DIR__ . '/../../files/Unknown');
     }
 }

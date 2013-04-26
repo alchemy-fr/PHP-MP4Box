@@ -11,18 +11,13 @@
          verbose="false"
          bootstrap="tests/bootstrap.php"
 >
-    <logging>
-      <log type="coverage-html" target="tests/phpunit_report/report" charset="UTF-8"
-           yui="true" highlight="false"
-           lowUpperBound="35" highLowerBound="70"/>
-    </logging>
     <php>
       <ini name="display_errors" value="on"/>
     </php>
 
     <testsuites>
-        <testsuite name="PHP MP4Box Tests Suite">
-            <directory>tests/MP4Box/Tests</directory>
+        <testsuite name="MP4Box Functional Tests Suite">
+            <directory>tests/MP4Box/Functional</directory>
         </testsuite>
     </testsuites>
     <filter>
