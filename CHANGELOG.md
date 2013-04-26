@@ -1,6 +1,10 @@
 CHANGELOG
 ---------
 
+* 0.2.2 (xx-xx-xxxx)
+
+  * Split unit and functional tests
+
 * 0.2.1 (04-24-2013)
 
   * Add support for timeout in ServiceProvider
