@@ -26,7 +26,11 @@ class MP4BoxServiceProviderTest extends \PHPUnit_Framework_TestCase
     public function testInitFailOnBinary()
     {
         $app = $this->getApplication();
-        $app->register(new MP4BoxServiceProvider(), array('mp4box.binary' => 'no/binary/here'));
+        $app->register(new MP4BoxServiceProvider(), array(
+            'mp4box.configuration' => array(
+                'mp4box.binaries' => 'no/binary/here'
+            )
+        ));
 
         $app['mp4box'];
     }
@@ -36,16 +40,22 @@ class MP4BoxServiceProviderTest extends \PHPUnit_Framework_TestCase
         $logger = $this->getMock('Psr\Log\LoggerInterface');
 
         $app = $this->getApplication();
-        $app->register(new MP4BoxServiceProvider(), array('mp4box.logger' => $logger));
+        $app->register(new MP4BoxServiceProvider(), array(
+            'mp4box.logger' => $logger
+        ));
 
         $this->assertInstanceOf('\\MP4Box\\MP4Box', $app['mp4box']);
-        $this->assertEquals($logger, $app['mp4box']->getLogger());
+        $this->assertEquals($logger, $app['mp4box']->getProcessRunner()->getLogger());
     }
 
     public function testInitCustomTimeout()
     {
         $app = $this->getApplication();
-        $app->register(new MP4BoxServiceProvider(), array('mp4box.timeout' => 128));
+        $app->register(new MP4BoxServiceProvider(), array(
+            'mp4box.configuration' => array(
+                'timeout' => 128
+            )
+        ));
 
         $this->assertEquals(128, $app['mp4box']->getProcessBuilderFactory()->getTimeout());
     }

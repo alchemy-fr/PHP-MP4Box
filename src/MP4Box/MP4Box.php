@@ -12,6 +12,7 @@
 namespace MP4Box;
 
 use Alchemy\BinaryDriver\AbstractBinary;
+use Alchemy\BinaryDriver\Configuration;
 use Alchemy\BinaryDriver\ConfigurationInterface;
 use Alchemy\BinaryDriver\Exception\ExecutionFailureException;
 use MP4Box\Exception\InvalidFileArgumentException;
@@ -42,7 +43,6 @@ class MP4Box extends AbstractBinary
     public function process($inputFile, $outputFile = null)
     {
         if (!file_exists($inputFile) || !is_readable($inputFile)) {
-            $this->logger->error(sprintf('Request to open %s failed', $inputFile));
             throw new InvalidFileArgumentException(sprintf('File %s does not exist or is not readable', $inputFile));
         }
 
@@ -61,7 +61,7 @@ class MP4Box extends AbstractBinary
         }
 
         try {
-            $this->run($this->factory->create($arguments));
+            $this->command($arguments);
         } catch (ExecutionFailureException $e) {
             throw new RuntimeException(sprintf(
                 'MP4Box failed to process %s', $inputFile
@@ -72,15 +72,21 @@ class MP4Box extends AbstractBinary
     }
 
     /**
-     * Creates an MP4Box binary adapter
+     * Creates an MP4Box binary adapter.
      *
      * @param null|LoggerInterface         $logger
      * @param array|ConfigurationInterface $conf
      *
      * @return MP4Box
      */
-    public static function create(LoggerInterface $logger = null, $conf = array())
+    public static function create($conf = array(), LoggerInterface $logger = null)
     {
-        return static::load('MP4Box', $logger, $conf);
+        if (!$conf instanceof ConfigurationInterface) {
+            $conf = new Configuration($conf);
+        }
+
+        $binaries = $conf->get('mp4box.binaries', array('MP4Box'));
+
+        return static::load($binaries, $logger, $conf);
     }
 }

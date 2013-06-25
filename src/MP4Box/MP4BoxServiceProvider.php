@@ -16,25 +16,21 @@ use Silex\ServiceProviderInterface;
 
 class MP4BoxServiceProvider implements ServiceProviderInterface
 {
-
     public function register(Application $app)
     {
-        $app['mp4box.binary'] = null;
+        $app['mp4box.default.configuration'] = array(
+            'mp4box.binaries' => array('MP4Box'),
+            'timeout'         => 60,
+        );
+        $app['mp4box.configuration'] = array();
         $app['mp4box.logger'] = null;
-        $app['mp4box.timeout'] = 0;
 
         $app['mp4box'] = $app->share(function(Application $app) {
-            if (null !== $app['mp4box.logger']) {
-                $logger = $app['mp4box.logger'];
-            } else {
-                $logger = null;
-            }
+            $app['mp4box.configuration'] = array_replace(
+                $app['mp4box.default.configuration'], $app['mp4box.configuration']
+            );
 
-            if (null === $app['mp4box.binary']) {
-                return MP4Box::create($logger, array('timeout' => $app['mp4box.timeout']));
-            } else {
-                return MP4Box::load($app['mp4box.binary'], $logger, array('timeout' => $app['mp4box.timeout']));
-            }
+            return MP4Box::create($app['mp4box.configuration'], $app['mp4box.logger']);
         });
     }
 
