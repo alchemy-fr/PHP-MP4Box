@@ -18,9 +18,13 @@ configuration options.
 Available options are :
 
  - timeout : the timeout for the underlying process
+ - mp4box.binaries : the path (or an array of paths) to custom binary.
 
 ```php
-$mp4box = MP4Box\MP4Box::create($logger, array('timeout' => 42));
+$mp4box = MP4Box\MP4Box::create(array(
+    'timeout'         => 42,
+    'mp4box.bonaries' => '/path/to/custom/binary',
+), $logger);
 ```
 
 To process a mp4 file, use the `process` method :
@@ -44,9 +48,13 @@ are optionals :
 ```php
 $app = new Silex\Application();
 $app->register(new MP4Box\MP4BoxServiceProvider(), array(
-    'mp4box.logger'  => $app->share(function () { return $app['monolog']; }), // use Monolog service provider
-    'mp4box.binary'  => '/path/to/custom/binary',
-    'mp4box.timeout' => 42,
+    'mp4box.configuration' => array(
+        'mp4box.binaries' => '/path/to/custom/binary',
+        'timeout'         => 42,
+    ),
+    'mp4box.logger'  => $app->share(function () {
+        return $app['monolog']; // use Monolog service provider
+    }),
 ));
 ```
 
