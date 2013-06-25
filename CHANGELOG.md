@@ -1,6 +1,11 @@
 CHANGELOG
 ---------
 
+* 0.3.0 (06-25-2013)
+
+  * BC Break : switch MP4Box::create arguments.
+  * BC Break : simplify service provider configuration.
+
 * 0.2.2 (04-27-2013)
 
   * Split unit and functional tests
