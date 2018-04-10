@@ -62,7 +62,3 @@ $app->register(new MP4Box\MP4BoxServiceProvider(), array(
 
 MIT licensed
 
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/alchemy-fr/php-mp4box/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
