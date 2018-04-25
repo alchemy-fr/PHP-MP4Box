@@ -4,8 +4,9 @@ namespace MP4Box\Tests;
 
 use Silex\Application;
 use MP4Box\MP4BoxServiceProvider;
+use \PHPUnit\Framework\TestCase;
 
-class MP4BoxServiceProviderTest extends \PHPUnit_Framework_TestCase
+class MP4BoxServiceProviderTest extends TestCase
 {
     public function getApplication()
     {
@@ -37,7 +38,7 @@ class MP4BoxServiceProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testInitCustomLogger()
     {
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
 
         $app = $this->getApplication();
         $app->register(new MP4BoxServiceProvider(), array(

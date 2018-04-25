@@ -3,8 +3,9 @@
 namespace MP4Box\Functional;
 
 use MP4Box\MP4Box;
+use \PHPUnit\Framework\TestCase;
 
-class MP4BoxTest extends \PHPUnit_Framework_TestCase
+class MP4BoxTest extends TestCase
 {
     public function testProcess()
     {
