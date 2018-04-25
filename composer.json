@@ -21,7 +21,7 @@
         "alchemy/binary-driver" : "~4.1"
     },
     "require-dev": {
-        "phpunit/phpunit"       : "~4.8",
+        "phpunit/phpunit"       : "~6.0",
         "silex/silex"           : "~2.0"
     },
     "autoload": {
